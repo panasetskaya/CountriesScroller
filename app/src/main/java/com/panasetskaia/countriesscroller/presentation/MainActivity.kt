@@ -4,15 +4,26 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.panasetskaia.countriesscroller.R
+import com.panasetskaia.countriesscroller.application.CountriesScrollerApp
+import com.panasetskaia.countriesscroller.di.ViewModelFactory
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        testLoading()
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    val component by lazy {
+        (application as CountriesScrollerApp).component
     }
 
-    private fun testLoading() {
-        val viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+    val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        component.inject(this)
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
     }
 }
