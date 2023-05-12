@@ -3,8 +3,9 @@ package com.panasetskaia.countriesscroller.data.mapper
 import com.google.gson.Gson
 import com.panasetskaia.countriesscroller.data.network.model.CountryDto
 import com.panasetskaia.countriesscroller.domain.Country
+import javax.inject.Inject
 
-class CountryMapper {
+class CountryMapper @Inject constructor() {
 
     fun mapDtoToDomain(dtoModel: CountryDto): Country {
         val languages = parseLanguages(dtoModel)
