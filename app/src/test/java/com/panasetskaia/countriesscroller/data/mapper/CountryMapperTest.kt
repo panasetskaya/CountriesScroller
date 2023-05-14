@@ -53,7 +53,7 @@ class CountryMapperTest {
     }
 
     @Test
-    fun languagesJsonObjectIsNull_returnsEmptyList() {
+    fun languagesJsonObjectIsNull_returnsEmptyListAsLanguages() {
         val dtoModel = CountryDto(
             NamesContainerDto("common", "official"),
             "subregion",
