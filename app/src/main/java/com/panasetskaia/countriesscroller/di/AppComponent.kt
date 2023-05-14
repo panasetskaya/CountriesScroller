@@ -1,6 +1,7 @@
 package com.panasetskaia.countriesscroller.di
 
 import android.app.Application
+import com.panasetskaia.countriesscroller.presentation.allCountriesScreen.AllCountriesFragment
 import com.panasetskaia.countriesscroller.presentation.MainActivity
 import dagger.BindsInstance
 import dagger.Component
@@ -10,6 +11,8 @@ import dagger.Component
 interface AppComponent {
 
     fun inject(activity: MainActivity)
+
+    fun inject(fragment: AllCountriesFragment)
 
     @Component.Factory
     interface AppComponentFactory {

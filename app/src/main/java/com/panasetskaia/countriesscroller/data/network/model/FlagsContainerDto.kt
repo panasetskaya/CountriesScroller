@@ -6,5 +6,5 @@ import com.google.gson.annotations.SerializedName
 data class FlagsContainerDto(
     @SerializedName("png")
     @Expose
-    val flagPngUrl: String
+    val flagPngUrl: String?
 )
