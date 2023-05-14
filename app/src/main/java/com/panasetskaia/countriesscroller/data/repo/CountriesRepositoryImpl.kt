@@ -25,7 +25,7 @@ class CountriesRepositoryImpl @Inject constructor(
             NetworkResult.success(result)
         } catch (e: Exception) {
             Log.e(LOG_TAG, e.message.toString())
-            NetworkResult.error()
+            NetworkResult.error(e.message)
         }
     }
 }
