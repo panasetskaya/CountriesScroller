@@ -1,7 +1,7 @@
 package com.panasetskaia.countriesscroller.di
 
 import android.app.Application
-import com.panasetskaia.countriesscroller.presentation.AllCountriesFragment
+import com.panasetskaia.countriesscroller.presentation.allCountriesScreen.AllCountriesFragment
 import com.panasetskaia.countriesscroller.presentation.MainActivity
 import dagger.BindsInstance
 import dagger.Component

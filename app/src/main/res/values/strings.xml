@@ -2,4 +2,7 @@
     <string name="app_name">Countries Scroller</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="small_flag_image_description">Country flag image</string>
+    <string name="page_title">Countries Scroller</string>
+    <string name="loadingError">Network error</string>
 </resources>

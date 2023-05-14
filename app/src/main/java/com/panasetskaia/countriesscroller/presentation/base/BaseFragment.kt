@@ -24,7 +24,7 @@ abstract class BaseFragment<mbinding : ViewBinding, mviewModel : BaseViewModel>(
     protected abstract val viewModel: mviewModel
 
     private var _binding: mbinding? = null
-    private val binding: mbinding
+    val binding: mbinding
         get() = _binding ?: throw RuntimeException("FragmentBinding is null")
 
     override fun onCreateView(
@@ -66,5 +66,7 @@ abstract class BaseFragment<mbinding : ViewBinding, mviewModel : BaseViewModel>(
             is NavigationCommand.Back -> findNavController().navigateUp()
         }
     }
+
+
 
 }

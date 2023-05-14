@@ -19,7 +19,7 @@ data class CountryDto(
     val capital: List<String>?,
     @SerializedName("population")
     @Expose
-    val population: Long?,
+    val population: Int?,
     @SerializedName("flags")
     @Expose
     val flags: FlagsContainerDto?

@@ -6,6 +6,6 @@ data class Country(
     val subregion: String?,
     val languages: List<String>,
     val capital: String?,
-    val population: Long?,
+    val population: Int?,
     val flagUrl: String?
     )
