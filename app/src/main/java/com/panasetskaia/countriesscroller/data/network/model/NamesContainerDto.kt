@@ -6,8 +6,8 @@ import com.google.gson.annotations.SerializedName
 data class NamesContainerDto(
     @SerializedName("common")
     @Expose
-    val commonName: String,
+    val commonName: String?,
     @SerializedName("official")
     @Expose
-    val officialName: String
+    val officialName: String?
 )

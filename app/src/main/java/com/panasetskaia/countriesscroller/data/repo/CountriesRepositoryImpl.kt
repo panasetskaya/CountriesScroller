@@ -6,6 +6,7 @@ import com.panasetskaia.countriesscroller.data.network.ApiService
 import com.panasetskaia.countriesscroller.domain.CountriesRepository
 import com.panasetskaia.countriesscroller.domain.Country
 import com.panasetskaia.countriesscroller.domain.NetworkResult
+import com.panasetskaia.countriesscroller.utils.Constants.LOG_TAG
 import javax.inject.Inject
 
 class CountriesRepositoryImpl @Inject constructor(
@@ -19,16 +20,12 @@ class CountriesRepositoryImpl @Inject constructor(
             val result = mutableListOf<Country>()
             for (countryDto in countryDtoList) {
                 val country = mapper.mapDtoToDomain(countryDto)
-                result.add(country)
+                country?.let { result.add(it) } ?: Log.d(LOG_TAG, "null common name for dto: $countryDto")
             }
             NetworkResult.success(result)
         } catch (e: Exception) {
             Log.e(LOG_TAG, e.message.toString())
             NetworkResult.error()
         }
-    }
-
-    companion object {
-        private const val LOG_TAG = "MYTAG"
     }
 }
