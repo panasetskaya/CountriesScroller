@@ -2,6 +2,7 @@ package com.panasetskaia.countriesscroller.presentation.all_countries_screen
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
@@ -13,6 +14,7 @@ import com.panasetskaia.countriesscroller.databinding.FragmentAllCountriesBindin
 import com.panasetskaia.countriesscroller.domain.Status
 import com.panasetskaia.countriesscroller.presentation.AllCountriesViewModel
 import com.panasetskaia.countriesscroller.presentation.base.BaseFragment
+import com.panasetskaia.countriesscroller.utils.Constants
 import com.panasetskaia.countriesscroller.utils.getAppComponent
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -32,8 +34,16 @@ class AllCountriesFragment :
     }
 
     override fun onReady(savedInstanceState: Bundle?) {
+        setupSwipeRefresh()
         setAdapter()
         collectFlow()
+    }
+
+    private fun setupSwipeRefresh() {
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.reloadCountries()
+            Log.d(Constants.LOG_TAG, "swipeRefresh.setOnRefreshListener")
+        }
     }
 
     private fun setAdapter() {
@@ -53,6 +63,7 @@ class AllCountriesFragment :
                     viewModel.countriesList.collectLatest {
                         when (it.status) {
                             Status.ERROR -> {
+                                binding.swipeRefresh.isRefreshing = false
                                 binding.progressBar.visibility = View.GONE
                                 Toast.makeText(
                                     requireContext(),
@@ -61,9 +72,11 @@ class AllCountriesFragment :
                                 ).show()
                             }
                             Status.LOADING -> {
+                                binding.swipeRefresh.isRefreshing = false
                                 binding.progressBar.visibility = View.VISIBLE
                             }
                             Status.SUCCESS -> {
+                                binding.swipeRefresh.isRefreshing = false
                                 binding.progressBar.visibility = View.GONE
                                 listAdapter.submitList(it.data)
                             }

@@ -1,9 +1,15 @@
 <resources>
+
     <string name="app_name">Countries Scroller</string>
+
+    //all countries screen
     <string name="small_flag_image_description">Country flag image</string>
     <string name="page_title">Countries Scroller</string>
     <string name="loadingError">Network error</string>
-    <string name="official_name">Official name</string>
 
+    //country details screen
+    <string name="official_name">Official name</string>
     <string name="country_info">%1s is in %2s.\n\nThere are %3d people living there, they speak %4s.\n\nTheir capital is %5s.</string>
+
+
 </resources>

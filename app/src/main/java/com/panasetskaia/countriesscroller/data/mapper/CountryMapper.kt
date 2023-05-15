@@ -12,7 +12,7 @@ class CountryMapper @Inject constructor() {
     /**
      * Returns a Country object if the dtoModel's commonName is not null otherwise returns null
      */
-    fun mapDtoToDomain(dtoModel: CountryDto): Country? {
+    fun mapDtoToDomainEntity(dtoModel: CountryDto): Country? {
         val languages = parseLanguages(dtoModel)
         val nameContainer = dtoModel.name
         if (nameContainer==null) return null else {

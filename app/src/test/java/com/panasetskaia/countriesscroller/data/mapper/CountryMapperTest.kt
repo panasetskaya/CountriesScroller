@@ -26,7 +26,7 @@ class CountryMapperTest {
             null,
             null
         )
-        val result = mapper.mapDtoToDomain(dtoModel)
+        val result = mapper.mapDtoToDomainEntity(dtoModel)
         assertThat(result).isNull()
     }
 
@@ -40,7 +40,7 @@ class CountryMapperTest {
             null,
             null
         )
-        val result = mapper.mapDtoToDomain(dtoModel)
+        val result = mapper.mapDtoToDomainEntity(dtoModel)
         assertThat(result).isEqualTo(Country(
             "common",
             "official",
@@ -62,7 +62,7 @@ class CountryMapperTest {
             null,
             null
         )
-        val country = mapper.mapDtoToDomain(dtoModel)
+        val country = mapper.mapDtoToDomainEntity(dtoModel)
         country?.let {
             assertThat(it.languages).isEqualTo(listOf<String>())
         }
