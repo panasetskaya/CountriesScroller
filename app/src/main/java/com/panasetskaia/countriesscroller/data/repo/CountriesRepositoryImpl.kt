@@ -30,7 +30,7 @@ class CountriesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getCountryByName(commonName: String): Country {
-        return Country(commonName,null,null, listOf(),null,null,null)
+        return Country(commonName,"Kingdom of Spain","Southern Europe", listOf("Spanish", "Catalonian"),"Madrid",47351567,"https://flagcdn.com/w320/es.png")
         //todo
     }
 }
