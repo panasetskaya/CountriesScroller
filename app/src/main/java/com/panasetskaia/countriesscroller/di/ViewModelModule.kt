@@ -1,7 +1,8 @@
 package com.panasetskaia.countriesscroller.di
 
 import androidx.lifecycle.ViewModel
-import com.panasetskaia.countriesscroller.presentation.MainViewModel
+import com.panasetskaia.countriesscroller.presentation.AllCountriesViewModel
+import com.panasetskaia.countriesscroller.presentation.details_screen.DetailsViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -11,6 +12,11 @@ interface ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(MainViewModel::class)
-    fun bindMainViewModel(impl: MainViewModel): ViewModel
+    @ViewModelKey(AllCountriesViewModel::class)
+    fun bindAllCountriesViewModel(impl: AllCountriesViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DetailsViewModel::class)
+    fun bindDetailsViewModel(impl: DetailsViewModel): ViewModel
 }

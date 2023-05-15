@@ -1,4 +1,4 @@
-package com.panasetskaia.countriesscroller.presentation.allCountriesScreen
+package com.panasetskaia.countriesscroller.presentation.all_countries_screen
 
 import android.content.Context
 import android.os.Bundle
@@ -7,10 +7,11 @@ import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.RecyclerView
 import com.panasetskaia.countriesscroller.R
 import com.panasetskaia.countriesscroller.databinding.FragmentAllCountriesBinding
 import com.panasetskaia.countriesscroller.domain.Status
-import com.panasetskaia.countriesscroller.presentation.MainViewModel
+import com.panasetskaia.countriesscroller.presentation.AllCountriesViewModel
 import com.panasetskaia.countriesscroller.presentation.base.BaseFragment
 import com.panasetskaia.countriesscroller.utils.getAppComponent
 import kotlinx.coroutines.flow.collectLatest
@@ -18,10 +19,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AllCountriesFragment :
-    BaseFragment<FragmentAllCountriesBinding, MainViewModel>(FragmentAllCountriesBinding::inflate) {
+    BaseFragment<FragmentAllCountriesBinding, AllCountriesViewModel>(FragmentAllCountriesBinding::inflate) {
 
     @Inject
-    override lateinit var viewModel: MainViewModel
+    override lateinit var viewModel: AllCountriesViewModel
 
     lateinit var listAdapter: CountriesListAdapter
 
@@ -30,20 +31,19 @@ class AllCountriesFragment :
         getAppComponent().inject(this)
     }
 
-
     override fun onReady(savedInstanceState: Bundle?) {
-        listAdapter = CountriesListAdapter {
-            viewModel.goToCountryDetailsFragment(it)
-        }
-        binding.rViewCountries.adapter = listAdapter
+        setAdapter()
         collectFlow()
-
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            AllCountriesFragment()
+    private fun setAdapter() {
+        listAdapter = CountriesListAdapter()
+        listAdapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        binding.rViewCountries.adapter = listAdapter
+        listAdapter.onItemClickedListener = {
+            viewModel.goToCountryDetailsFragment(it)
+        }
     }
 
     private fun collectFlow() {

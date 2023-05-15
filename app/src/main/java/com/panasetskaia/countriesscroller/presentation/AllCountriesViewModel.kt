@@ -4,13 +4,14 @@ import androidx.lifecycle.viewModelScope
 import com.panasetskaia.countriesscroller.domain.Country
 import com.panasetskaia.countriesscroller.domain.LoadAllCountriesUseCase
 import com.panasetskaia.countriesscroller.domain.NetworkResult
+import com.panasetskaia.countriesscroller.presentation.all_countries_screen.AllCountriesFragmentDirections
 import com.panasetskaia.countriesscroller.presentation.base.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor(
+class AllCountriesViewModel @Inject constructor(
     private val loadAllCountriesUseCase: LoadAllCountriesUseCase
 ) : BaseViewModel() {
 
@@ -25,13 +26,8 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun goToAllCountriesFragmentClicked() {
-        //todo
-    }
-
     fun goToCountryDetailsFragment(country: Country) {
-        //todo
-//        navigate(AllDogsFragmentDirections.actionAllDogsFragmentToDogDetailsFragment(breed))
+        navigate(AllCountriesFragmentDirections.actionAllCountriesFragmentToDetailsFragment(country.commonName))
     }
 
 }

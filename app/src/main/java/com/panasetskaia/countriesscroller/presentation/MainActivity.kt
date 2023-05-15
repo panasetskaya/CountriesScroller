@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     val viewModel by lazy {
-        ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
+        ViewModelProvider(this, viewModelFactory)[AllCountriesViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

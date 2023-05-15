@@ -7,7 +7,20 @@
 
     <fragment
         android:id="@+id/allCountriesFragment"
-        android:name="com.panasetskaia.countriesscroller.presentation.allCountriesScreen.AllCountriesFragment"
+        android:name="com.panasetskaia.countriesscroller.presentation.all_countries_screen.AllCountriesFragment"
         android:label="fragment_all_countries"
-        tools:layout="@layout/fragment_all_countries" />
+        tools:layout="@layout/fragment_all_countries" >
+        <action
+            android:id="@+id/action_allCountriesFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.panasetskaia.countriesscroller.presentation.details_screen.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" >
+        <argument
+            android:name="commonName"
+            app:argType="string" />
+    </fragment>
 </navigation>

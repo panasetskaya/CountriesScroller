@@ -20,12 +20,17 @@ class CountriesRepositoryImpl @Inject constructor(
             val result = mutableListOf<Country>()
             for (countryDto in countryDtoList) {
                 val country = mapper.mapDtoToDomain(countryDto)
-                country?.let { result.add(it) } ?: Log.d(LOG_TAG, "null common name for dto: $countryDto")
+                country?.let { result.add(it) } ?: Log.d(LOG_TAG, "Null common name for dto: $countryDto")
             }
             NetworkResult.success(result)
         } catch (e: Exception) {
             Log.e(LOG_TAG, e.message.toString())
             NetworkResult.error(e.message)
         }
+    }
+
+    override suspend fun getCountryByName(commonName: String): Country {
+        return Country(commonName,null,null, listOf(),null,null,null)
+        //todo
     }
 }
