@@ -1,26 +1,28 @@
 package com.panasetskaia.countriesscroller.data.network.model
 
-import com.google.gson.JsonObject
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
+
+@Serializable
 data class CountryDto(
-    @SerializedName("name")
-    @Expose
-    val name: NamesContainerDto?,
-    @SerializedName("subregion")
-    @Expose
-    val subregion: String?,
-    @SerializedName("languages")
-    @Expose
-    val languages: JsonObject?,
-    @SerializedName("capital")
-    @Expose
-    val capital: List<String>?,
-    @SerializedName("population")
-    @Expose
-    val population: Int?,
-    @SerializedName("flags")
-    @Expose
-    val flags: FlagsContainerDto?
+
+    @SerialName("name")
+    val name: NamesContainerDto? = null,
+
+    @SerialName("subregion")
+    val subregion: String? = null,
+
+    @SerialName("languages")
+    val languages: JsonObject? = null,
+
+    @SerialName("capital")
+    val capital: List<String>? = null,
+
+    @SerialName("population")
+    val population: Int? = null,
+
+    @SerialName("flags")
+    val flags: FlagsContainerDto? = null
 )

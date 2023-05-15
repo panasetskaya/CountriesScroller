@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.panasetskaia.countriesscroller.R
 import com.panasetskaia.countriesscroller.application.CountriesScrollerApp
-import com.panasetskaia.countriesscroller.di.ViewModelFactory
+import com.panasetskaia.countriesscroller.di.viewmodel.ViewModelFactory
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     val viewModel by lazy {
-        ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
+        ViewModelProvider(this, viewModelFactory)[AllCountriesViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

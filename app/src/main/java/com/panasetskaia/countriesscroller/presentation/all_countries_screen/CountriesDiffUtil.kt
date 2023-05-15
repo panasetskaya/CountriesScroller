@@ -1,4 +1,4 @@
-package com.panasetskaia.countriesscroller.presentation.allCountriesScreen
+package com.panasetskaia.countriesscroller.presentation.all_countries_screen
 
 import androidx.recyclerview.widget.DiffUtil
 import com.panasetskaia.countriesscroller.domain.Country

@@ -1,4 +1,4 @@
-package com.panasetskaia.countriesscroller.presentation.allCountriesScreen
+package com.panasetskaia.countriesscroller.presentation.all_countries_screen
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,10 +9,12 @@ import com.panasetskaia.countriesscroller.R
 import com.panasetskaia.countriesscroller.databinding.ItemCountryBinding
 import com.panasetskaia.countriesscroller.domain.Country
 
-class CountriesListAdapter(private val onItemClickedListener: (Country) -> Unit) :
+class CountriesListAdapter:
     ListAdapter<Country, CountriesListAdapter.CountriesViewHolder>(CountriesDiffUtil()) {
     class CountriesViewHolder(val binding: ItemCountryBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    var onItemClickedListener: ((Country) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountriesViewHolder {
         val binding = ItemCountryBinding.inflate(
@@ -26,8 +28,8 @@ class CountriesListAdapter(private val onItemClickedListener: (Country) -> Unit)
     override fun onBindViewHolder(holder: CountriesViewHolder, position: Int) {
         val item = getItem(position)
         val binding = holder.binding
-        binding.root.setOnLongClickListener {
-            onItemClickedListener(item)
+        binding.root.setOnClickListener {
+            onItemClickedListener?.invoke(item)
             true
         }
         with(binding) {

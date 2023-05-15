@@ -1,10 +1,10 @@
 package com.panasetskaia.countriesscroller.data.network.model
 
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class FlagsContainerDto(
-    @SerializedName("png")
-    @Expose
-    val flagPngUrl: String?
+    @SerialName("png")
+    val flagPngUrl: String? = null
 )
