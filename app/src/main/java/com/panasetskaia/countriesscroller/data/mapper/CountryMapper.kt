@@ -53,8 +53,9 @@ class CountryMapper @Inject constructor() {
         val keys = languagesJsonObj.keys
         for (key in keys) {
             try {
-                val language = Json.encodeToString(languagesJsonObj[key])
+                val language = Json.encodeToString(languagesJsonObj[key]).trim('"')
                 result.add(language)
+                Log.e(Constants.LOG_TAG,"language: $language")
             } catch (e:Exception) {
                 Log.e(Constants.LOG_TAG,"Error occurred when parsing languagesJsonObject: ${e.message}")
             }

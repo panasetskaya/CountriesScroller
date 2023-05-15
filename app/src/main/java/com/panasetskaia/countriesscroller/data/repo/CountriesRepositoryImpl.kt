@@ -4,13 +4,10 @@ import android.util.Log
 import com.panasetskaia.countriesscroller.data.local.CountryDao
 import com.panasetskaia.countriesscroller.data.mapper.CountryMapper
 import com.panasetskaia.countriesscroller.data.network.ApiService
-import com.panasetskaia.countriesscroller.data.network.model.CountryDto
 import com.panasetskaia.countriesscroller.domain.CountriesRepository
 import com.panasetskaia.countriesscroller.domain.Country
 import com.panasetskaia.countriesscroller.domain.NetworkResult
 import com.panasetskaia.countriesscroller.utils.Constants.LOG_TAG
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.MissingFieldException
 import javax.inject.Inject
 
 class CountriesRepositoryImpl @Inject constructor(
