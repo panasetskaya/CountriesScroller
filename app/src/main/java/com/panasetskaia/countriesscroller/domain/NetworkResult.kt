@@ -6,8 +6,8 @@ data class NetworkResult<out T>(val status: Status, val data: T?, val msg: Strin
         fun <T> success(data: T): NetworkResult<T> {
             return NetworkResult(Status.SUCCESS, data, null)
         }
-        fun <T> error(msg: String?): NetworkResult<T> {
-            return NetworkResult(Status.ERROR, null, msg)
+        fun <T> error(data: T?, msg: String?): NetworkResult<T> {
+            return NetworkResult(Status.ERROR, data, msg)
         }
         fun <T> loading(): NetworkResult<T> {
             return NetworkResult(Status.LOADING, null, null)

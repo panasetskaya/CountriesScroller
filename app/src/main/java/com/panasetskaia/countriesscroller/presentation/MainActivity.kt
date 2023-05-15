@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.panasetskaia.countriesscroller.R
 import com.panasetskaia.countriesscroller.application.CountriesScrollerApp
-import com.panasetskaia.countriesscroller.di.ViewModelFactory
+import com.panasetskaia.countriesscroller.di.viewmodel.ViewModelFactory
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {

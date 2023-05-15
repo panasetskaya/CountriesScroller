@@ -1,13 +1,14 @@
 package com.panasetskaia.countriesscroller.data.network.model
 
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class NamesContainerDto(
-    @SerializedName("common")
-    @Expose
-    val commonName: String?,
-    @SerializedName("official")
-    @Expose
-    val officialName: String?
+
+    @SerialName("common")
+    val commonName: String? = null,
+
+    @SerialName("official")
+    val officialName: String? = null
 )

@@ -1,4 +1,4 @@
-package com.panasetskaia.countriesscroller.di
+package com.panasetskaia.countriesscroller.di.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

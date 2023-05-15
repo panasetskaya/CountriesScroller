@@ -1,18 +1,21 @@
 package com.panasetskaia.countriesscroller.data.mapper
 
 import android.util.Log
-import com.google.gson.Gson
+
+import com.panasetskaia.countriesscroller.data.local.CountryDBModel
 import com.panasetskaia.countriesscroller.data.network.model.CountryDto
 import com.panasetskaia.countriesscroller.domain.Country
 import com.panasetskaia.countriesscroller.utils.Constants
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 class CountryMapper @Inject constructor() {
 
     /**
-     * Returns a Country object if the dtoModel's commonName is not null otherwise returns null
+     * Returns a CountryDBModel object if the dtoModel's commonName is not null otherwise returns null
      */
-    fun mapDtoToDomainEntity(dtoModel: CountryDto): Country? {
+    fun mapDtoToDBModel(dtoModel: CountryDto): CountryDBModel? {
         val languages = parseLanguages(dtoModel)
         val nameContainer = dtoModel.name
         if (nameContainer==null) return null else {
@@ -20,7 +23,7 @@ class CountryMapper @Inject constructor() {
             val officialName = dtoModel.name.officialName
             val capital = dtoModel.capital?.get(0)
             val flagUrl = dtoModel.flags?.flagPngUrl
-            return Country(
+            return CountryDBModel(
                 commonName,
                 officialName,
                 dtoModel.subregion,
@@ -32,14 +35,25 @@ class CountryMapper @Inject constructor() {
         }
     }
 
+    fun mapDBModelToDomainEntity(dbModel: CountryDBModel): Country {
+        return Country(
+            dbModel.commonName,
+            dbModel.officialName,
+            dbModel.subregion,
+            dbModel.languages,
+            dbModel.capital,
+            dbModel.population,
+            dbModel.flagUrl
+        )
+    }
+
     private fun parseLanguages(dtoModel: CountryDto): List<String> {
         val result = mutableListOf<String>()
         val languagesJsonObj = dtoModel.languages ?: return result
-        val keys = languagesJsonObj.keySet()
+        val keys = languagesJsonObj.keys
         for (key in keys) {
             try {
-                val language =
-                    Gson().fromJson(languagesJsonObj.getAsJsonPrimitive(key), String::class.java)
+                val language = Json.encodeToString(languagesJsonObj[key])
                 result.add(language)
             } catch (e:Exception) {
                 Log.e(Constants.LOG_TAG,"Error occurred when parsing languagesJsonObject: ${e.message}")

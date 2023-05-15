@@ -4,6 +4,6 @@ interface CountriesRepository {
 
     suspend fun loadAllCountries(): NetworkResult<List<Country>>
 
-    suspend fun getCountryByName(commonName: String): Country
+    suspend fun getCountryByName(commonName: String): Country?
 
 }

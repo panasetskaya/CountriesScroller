@@ -58,14 +58,16 @@ class DetailsFragment :
     private fun setupBindingContent(country: Country) {
         binding.topAppBarDetail.title = country.commonName
         val languages = country.languages
-        if (languages.isNotEmpty() && detailsAreNotNull(country)) {
+        if (languages.isNotEmpty() && viewModel.detailsAreNotNull(country)) {
             val languagesAsString = languages.joinToString(", ")
+            val population = country.population?.let { viewModel.convertToThousands(it) }
             binding.tvCountryInfo.text = String.format(
                 getString(R.string.country_info),
                 country.commonName,
                 country.subregion,
-                country.population,
+                population,
                 languagesAsString,
+                country.commonName,
                 country.capital
             )
         }
@@ -75,14 +77,11 @@ class DetailsFragment :
             binding.officialNameLabel.visibility = View.INVISIBLE
         }
         if (country.flagUrl != null) {
-            Glide.with(requireContext()).load(country.flagUrl).centerCrop()
+            Glide.with(requireContext()).load(country.flagUrl)
                 .into(binding.imageViewBigFlag)
         }
     }
 
-    private fun detailsAreNotNull(country: Country): Boolean {
-        return country.subregion != null &&
-                country.population != null &&
-                country.capital != null
-    }
+
+
 }

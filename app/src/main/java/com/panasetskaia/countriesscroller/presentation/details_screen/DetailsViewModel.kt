@@ -24,7 +24,19 @@ class DetailsViewModel @Inject constructor(
     fun getCountryByName(commonName: String) {
         viewModelScope.launch {
             val countryByName = getCountryByNameUseCase(commonName)
-            _country.tryEmit(countryByName)
+            countryByName?.let {
+                _country.tryEmit(it)
+            }
         }
+    }
+
+    fun detailsAreNotNull(country: Country): Boolean {
+        return country.subregion != null &&
+                country.population != null &&
+                country.capital != null
+    }
+
+    fun convertToThousands(population: Int): Int {
+        return population / 1000
     }
 }

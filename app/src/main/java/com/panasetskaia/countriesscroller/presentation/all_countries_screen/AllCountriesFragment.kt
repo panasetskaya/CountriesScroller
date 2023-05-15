@@ -65,11 +65,15 @@ class AllCountriesFragment :
                             Status.ERROR -> {
                                 binding.swipeRefresh.isRefreshing = false
                                 binding.progressBar.visibility = View.GONE
+                                val errorMessage = String.format(getString(R.string.loadingError), it.msg)
                                 Toast.makeText(
                                     requireContext(),
-                                    R.string.loadingError,
+                                    errorMessage,
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                if (it.data!=null) {
+                                    listAdapter.submitList(it.data)
+                                }
                             }
                             Status.LOADING -> {
                                 binding.swipeRefresh.isRefreshing = false

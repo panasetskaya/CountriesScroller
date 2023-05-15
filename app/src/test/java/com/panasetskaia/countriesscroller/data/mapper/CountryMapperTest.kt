@@ -5,6 +5,7 @@ import com.panasetskaia.countriesscroller.data.network.model.NamesContainerDto
 import org.junit.Before
 import org.junit.Test
 import com.google.common.truth.Truth.assertThat
+import com.panasetskaia.countriesscroller.data.local.CountryDBModel
 import com.panasetskaia.countriesscroller.domain.Country
 
 class CountryMapperTest {
@@ -26,12 +27,12 @@ class CountryMapperTest {
             null,
             null
         )
-        val result = mapper.mapDtoToDomainEntity(dtoModel)
+        val result = mapper.mapDtoToDBModel(dtoModel)
         assertThat(result).isNull()
     }
 
     @Test
-    fun commonNameIsNotNull_returnsCountry() {
+    fun commonNameIsNotNull_returnsCountryDBModel() {
         val dtoModel = CountryDto(
             NamesContainerDto("common", "official"),
             "subregion",
@@ -40,8 +41,8 @@ class CountryMapperTest {
             null,
             null
         )
-        val result = mapper.mapDtoToDomainEntity(dtoModel)
-        assertThat(result).isEqualTo(Country(
+        val result = mapper.mapDtoToDBModel(dtoModel)
+        assertThat(result).isEqualTo(CountryDBModel(
             "common",
             "official",
             "subregion",
@@ -62,7 +63,7 @@ class CountryMapperTest {
             null,
             null
         )
-        val country = mapper.mapDtoToDomainEntity(dtoModel)
+        val country = mapper.mapDtoToDBModel(dtoModel)
         country?.let {
             assertThat(it.languages).isEqualTo(listOf<String>())
         }

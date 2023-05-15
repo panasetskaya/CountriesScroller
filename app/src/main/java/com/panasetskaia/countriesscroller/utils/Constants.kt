@@ -5,7 +5,7 @@ import com.panasetskaia.countriesscroller.application.CountriesScrollerApp
 import com.panasetskaia.countriesscroller.di.AppComponent
 
 object Constants {
-    const val LOG_TAG = "MYTAG"
+    const val LOG_TAG = "CountriesScrollerLog"
 }
 
 fun Fragment.getAppComponent(): AppComponent =
