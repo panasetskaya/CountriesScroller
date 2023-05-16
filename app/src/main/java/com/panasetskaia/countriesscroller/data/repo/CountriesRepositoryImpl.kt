@@ -8,6 +8,7 @@ import com.panasetskaia.countriesscroller.domain.CountriesRepository
 import com.panasetskaia.countriesscroller.domain.Country
 import com.panasetskaia.countriesscroller.domain.NetworkResult
 import com.panasetskaia.countriesscroller.utils.Constants.LOG_TAG
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 class CountriesRepositoryImpl @Inject constructor(
@@ -37,7 +38,12 @@ class CountriesRepositoryImpl @Inject constructor(
                     mapper.mapDBModelToDomainEntity(it)
                 }
             } else null
-            NetworkResult.error(result, e.message)
+            val msg = if (e is UnknownHostException) {
+                "You are offline"
+            } else {
+                "Network error"
+            }
+            NetworkResult.error(result, msg)
         }
     }
 

@@ -6,10 +6,23 @@
     <string name="small_flag_image_description">Country flag image</string>
     <string name="page_title">Countries Scroller</string>
     <string name="loadingError">Network error: %s</string>
+    <string-array name="subregions_array">
+        <item>All</item>
+        <item>Melanesia</item>
+    </string-array>
+    <string-array name="sort_options_array">
+        <item>Name</item>
+        <item>Population</item>
+    </string-array>
+    <string name="filter_title">Filter title</string>
+    <string name="unfilter_title">Filter off</string>
+    <string name="default_spinner_item">All</string>
+    <string name="ok">OK</string>
+    <string name="filter_options">Options</string>
+    <string name="filter_by_subregions">By subregions</string>
+    <string name="sort_by">Sort by:</string>
 
     //country details screen
     <string name="official_name">Official name</string>
     <string name="country_info">%1s is in %2s.\n\nThere are %3d thousand people living there, they speak %4s.\n\n%5s\'s capital is %6s.</string>
-
-
 </resources>

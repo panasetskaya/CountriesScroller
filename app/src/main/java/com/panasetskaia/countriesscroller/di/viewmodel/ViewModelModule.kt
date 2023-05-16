@@ -1,7 +1,7 @@
 package com.panasetskaia.countriesscroller.di.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.panasetskaia.countriesscroller.presentation.AllCountriesViewModel
+import com.panasetskaia.countriesscroller.presentation.all_countries_screen.AllCountriesViewModel
 import com.panasetskaia.countriesscroller.presentation.details_screen.DetailsViewModel
 import dagger.Binds
 import dagger.Module

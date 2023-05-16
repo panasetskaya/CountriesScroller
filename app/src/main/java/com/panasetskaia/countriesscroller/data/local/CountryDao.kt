@@ -8,7 +8,7 @@ import androidx.room.Query
 @Dao
 interface CountryDao {
 
-    @Query("SELECT * FROM countrydbmodel")
+    @Query("SELECT * FROM countrydbmodel ORDER BY commonName ASC")
     suspend fun getCountries(): List<CountryDBModel>
 
     @Query("SELECT * FROM countrydbmodel WHERE commonName == :commonName LIMIT 1")

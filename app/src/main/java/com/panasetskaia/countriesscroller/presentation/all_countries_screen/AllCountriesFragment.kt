@@ -4,15 +4,18 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.panasetskaia.countriesscroller.R
+import com.panasetskaia.countriesscroller.databinding.BottomSheetBinding
 import com.panasetskaia.countriesscroller.databinding.FragmentAllCountriesBinding
 import com.panasetskaia.countriesscroller.domain.Status
-import com.panasetskaia.countriesscroller.presentation.AllCountriesViewModel
 import com.panasetskaia.countriesscroller.presentation.base.BaseFragment
 import com.panasetskaia.countriesscroller.utils.Constants
 import com.panasetskaia.countriesscroller.utils.getAppComponent
@@ -26,7 +29,8 @@ class AllCountriesFragment :
     @Inject
     override lateinit var viewModel: AllCountriesViewModel
 
-    lateinit var listAdapter: CountriesListAdapter
+    private lateinit var bottomSheetDialog: BottomSheetDialog
+    private lateinit var listAdapter: CountriesListAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -35,7 +39,9 @@ class AllCountriesFragment :
 
     override fun onReady(savedInstanceState: Bundle?) {
         setupSwipeRefresh()
+        bottomSheetDialog = BottomSheetDialog(requireContext())
         setAdapter()
+        setMenuProvider()
         collectFlow()
     }
 
@@ -60,19 +66,18 @@ class AllCountriesFragment :
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.countriesList.collectLatest {
-                        when (it.status) {
+                    viewModel.countriesList.collectLatest { result ->
+                        when (result.status) {
                             Status.ERROR -> {
                                 binding.swipeRefresh.isRefreshing = false
                                 binding.progressBar.visibility = View.GONE
-                                val errorMessage = String.format(getString(R.string.loadingError), it.msg)
                                 Toast.makeText(
                                     requireContext(),
-                                    errorMessage,
+                                    result.msg,
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                if (it.data!=null) {
-                                    listAdapter.submitList(it.data)
+                                if (result.data != null) {
+                                    listAdapter.submitList(result.data)
                                 }
                             }
                             Status.LOADING -> {
@@ -82,12 +87,78 @@ class AllCountriesFragment :
                             Status.SUCCESS -> {
                                 binding.swipeRefresh.isRefreshing = false
                                 binding.progressBar.visibility = View.GONE
-                                listAdapter.submitList(it.data)
+                                listAdapter.submitList(result.data)
                             }
                         }
+                    }
+                }
+                launch {
+                    viewModel.filterOptions.collectLatest { filteringOptions ->
+                        if (filteringOptions.subRegion != null) {
+                            binding.topAppBarMain.menu.findItem(R.id.toolbar_menu_filter).isVisible =
+                                false
+                            binding.topAppBarMain.menu.findItem(R.id.toolbar_menu_filter_off).isVisible =
+                                true
+                        } else {
+                            binding.topAppBarMain.menu.findItem(R.id.toolbar_menu_filter).isVisible =
+                                true
+                            binding.topAppBarMain.menu.findItem(R.id.toolbar_menu_filter_off).isVisible =
+                                false
+                        }
+                        listAdapter.applyFilters(filteringOptions)
                     }
                 }
             }
         }
     }
+
+    private fun setMenuProvider() {
+        binding.topAppBarMain.inflateMenu(R.menu.filter_menu)
+        binding.topAppBarMain.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.toolbar_menu_filter -> {
+                    showBottomSheetDialog()
+                    true
+                }
+                R.id.toolbar_menu_filter_off -> {
+                    viewModel.cancelFiltering()
+                    true
+                }
+                else -> {
+                    true
+                }
+            }
+        }
+    }
+
+    private fun showBottomSheetDialog() {
+        val bottomSheetBinding = BottomSheetBinding.inflate(layoutInflater)
+        bottomSheetDialog.setContentView(bottomSheetBinding.root)
+        setSpinner(bottomSheetBinding.spinnerSubregions, R.array.subregions_array)
+        setSpinner(bottomSheetBinding.spinnerSorting, R.array.sort_options_array)
+        bottomSheetBinding.applyFiltersButton.setOnClickListener {
+            val selectedSubregion =
+                if (bottomSheetBinding.spinnerSubregions.selectedItemPosition == 0) {
+                    null
+                } else {
+                    bottomSheetBinding.spinnerSubregions.selectedItem as String?
+                }
+            val selectedSorting = bottomSheetBinding.spinnerSorting.selectedItemPosition
+            viewModel.changeFiltering(selectedSubregion, selectedSorting)
+            bottomSheetDialog.dismiss()
+        }
+        bottomSheetDialog.show()
+    }
+
+    private fun setSpinner(spinner: Spinner, array: Int) {
+        ArrayAdapter.createFromResource(
+            this.requireContext(),
+            array,
+            R.layout.item_spinner
+        ).also { adapter ->
+            adapter.setDropDownViewResource(R.layout.item_spinner)
+            spinner.adapter = adapter
+        }
+    }
+
 }

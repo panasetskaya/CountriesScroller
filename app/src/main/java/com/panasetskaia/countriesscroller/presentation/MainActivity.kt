@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.panasetskaia.countriesscroller.R
 import com.panasetskaia.countriesscroller.application.CountriesScrollerApp
 import com.panasetskaia.countriesscroller.di.viewmodel.ViewModelFactory
+import com.panasetskaia.countriesscroller.presentation.all_countries_screen.AllCountriesViewModel
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
