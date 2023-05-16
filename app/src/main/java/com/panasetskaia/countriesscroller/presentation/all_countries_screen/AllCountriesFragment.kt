@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -15,6 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.panasetskaia.countriesscroller.R
 import com.panasetskaia.countriesscroller.databinding.BottomSheetBinding
 import com.panasetskaia.countriesscroller.databinding.FragmentAllCountriesBinding
+import com.panasetskaia.countriesscroller.domain.Country
 import com.panasetskaia.countriesscroller.domain.Status
 import com.panasetskaia.countriesscroller.presentation.base.BaseFragment
 import com.panasetskaia.countriesscroller.utils.Constants
@@ -28,7 +30,7 @@ class AllCountriesFragment :
 
     @Inject
     override lateinit var viewModel: AllCountriesViewModel
-
+    private lateinit var searchView: SearchView
     private lateinit var bottomSheetDialog: BottomSheetDialog
     private lateinit var listAdapter: CountriesListAdapter
 
@@ -88,6 +90,7 @@ class AllCountriesFragment :
                                 binding.swipeRefresh.isRefreshing = false
                                 binding.progressBar.visibility = View.GONE
                                 listAdapter.submitList(result.data)
+                                setupSearch(result.data)
                             }
                         }
                     }
@@ -114,6 +117,8 @@ class AllCountriesFragment :
 
     private fun setMenuProvider() {
         binding.topAppBarMain.inflateMenu(R.menu.filter_menu)
+        searchView = binding.topAppBarMain.menu.findItem(R.id.toolbar_search).actionView as SearchView
+        searchView.maxWidth = Integer.MAX_VALUE
         binding.topAppBarMain.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.toolbar_menu_filter -> {
@@ -156,8 +161,35 @@ class AllCountriesFragment :
             array,
             R.layout.item_spinner
         ).also { adapter ->
-            adapter.setDropDownViewResource(R.layout.item_spinner)
+            adapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
             spinner.adapter = adapter
+        }
+    }
+
+    private fun setupSearch(list: List<Country>?) {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterByQuery(newText,list)
+                return false
+            }
+        })
+    }
+
+    private fun filterByQuery(query: String?, list: List<Country>?
+    ) {
+        query?.let {
+            val thereIs = list?.any { country ->
+                country.commonName.lowercase().contains(query.lowercase()) }
+            if (thereIs==true) {
+                listAdapter.filterByQuery(it, list)
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.not_found), Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
     }
 

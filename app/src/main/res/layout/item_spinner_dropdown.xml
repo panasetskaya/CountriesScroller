@@ -9,4 +9,5 @@
     android:paddingTop="16dp"
     android:paddingBottom="16dp"
     android:background="@drawable/rounded_shape"
+    android:backgroundTint="@android:color/transparent"
     tools:text="@string/default_spinner_item" />

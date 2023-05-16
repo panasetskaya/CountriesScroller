@@ -61,6 +61,13 @@ class CountriesListAdapter :
         submitList(result)
     }
 
+    fun filterByQuery(query: String, list: List<Country>) {
+        val result = list.filter { country ->
+            country.commonName.lowercase().contains(query.lowercase())
+        }
+        submitList(result)
+    }
+
     companion object {
         private const val SORT_BY_NAME = 0
         private const val SORT_BY_POPULATION = 1

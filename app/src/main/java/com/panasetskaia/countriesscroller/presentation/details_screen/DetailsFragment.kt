@@ -70,6 +70,8 @@ class DetailsFragment :
                 country.commonName,
                 country.capital
             )
+        } else {
+            binding.cardViewInfo.visibility = View.INVISIBLE
         }
         if (country.officialName!=null) {
             binding.officialName.text = country.officialName

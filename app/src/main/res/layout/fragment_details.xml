@@ -71,6 +71,7 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardViewInfo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="@id/imageViewBigFlag"
