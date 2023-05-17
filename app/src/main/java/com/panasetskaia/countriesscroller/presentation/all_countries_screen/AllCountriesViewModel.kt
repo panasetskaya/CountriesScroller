@@ -1,20 +1,25 @@
-package com.panasetskaia.countriesscroller.presentation
+package com.panasetskaia.countriesscroller.presentation.all_countries_screen
 
 import androidx.lifecycle.viewModelScope
 import com.panasetskaia.countriesscroller.domain.Country
 import com.panasetskaia.countriesscroller.domain.LoadAllCountriesUseCase
 import com.panasetskaia.countriesscroller.domain.NetworkResult
-import com.panasetskaia.countriesscroller.presentation.all_countries_screen.AllCountriesFragmentDirections
 import com.panasetskaia.countriesscroller.presentation.base.BaseViewModel
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AllCountriesViewModel @Inject constructor(
     private val loadAllCountriesUseCase: LoadAllCountriesUseCase
 ) : BaseViewModel() {
+
+    private val initialValue: NetworkResult<List<Country>> = NetworkResult.loading()
+
+    private val _innerCashCountries = MutableStateFlow(initialValue)
+
+    private val _filterOptions = MutableStateFlow(FilteringOptions())
+    val filterOptions: StateFlow<FilteringOptions> = _filterOptions
 
     private val _countriesList =
         MutableSharedFlow<NetworkResult<List<Country>>>(
@@ -24,14 +29,14 @@ class AllCountriesViewModel @Inject constructor(
     val countriesList: SharedFlow<NetworkResult<List<Country>>> = _countriesList
 
     init {
-        _countriesList.tryEmit(NetworkResult.loading())
+        _countriesList.tryEmit(initialValue)
         reloadCountries()
     }
 
     fun reloadCountries() {
         viewModelScope.launch {
-            val countries = loadAllCountriesUseCase()
-            _countriesList.tryEmit(countries)
+            _innerCashCountries.value = loadAllCountriesUseCase()
+            _countriesList.tryEmit(_innerCashCountries.value)
         }
     }
 
@@ -39,4 +44,15 @@ class AllCountriesViewModel @Inject constructor(
         navigate(AllCountriesFragmentDirections.actionAllCountriesFragmentToDetailsFragment(country.commonName))
     }
 
+    fun changeFiltering(subregion: String?, position: Int = 0) {
+        _filterOptions.value = FilteringOptions(subregion,position)
+    }
+
+    fun cancelFiltering() {
+        viewModelScope.launch {
+            _filterOptions.value = FilteringOptions()
+            _countriesList.tryEmit(_innerCashCountries.value)
+        }
+
+    }
 }

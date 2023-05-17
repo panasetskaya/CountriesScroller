@@ -27,14 +27,6 @@
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/page_title" >
 
-                <androidx.appcompat.widget.SearchView
-                    android:id="@+id/searchViewMain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end">
-
-                </androidx.appcompat.widget.SearchView>
-
             </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>

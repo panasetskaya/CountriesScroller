@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="16dp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/apply_filters_button"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/ok"
+            android:gravity="center"
+            style="@style/PrettyButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:backgroundTint="?colorSecondary"
+            android:background="@drawable/rounded_shape"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/apply_filters_button"
+            app:layout_constraintBottom_toBottomOf="@+id/apply_filters_button"
+            android:text="@string/filter_options"
+            android:layout_marginStart="16dp"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/tvBySubregion"/>
+
+        <TextView
+            android:id="@+id/tvBySubregion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_by_subregions"
+            android:textStyle="bold"
+            android:layout_marginStart="46dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/apply_filters_button" />
+
+        <Spinner
+            android:id="@+id/spinnerSubregions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="46dp"
+            android:layout_marginEnd="46dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_shape"
+            tools:listitem="@layout/item_spinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvBySubregion" />
+
+        <TextView
+            android:id="@+id/tvSortBy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sort_by"
+            android:textStyle="bold"
+            android:layout_marginStart="46dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerSubregions" />
+
+        <Spinner
+            android:id="@+id/spinnerSorting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="46dp"
+            android:layout_marginEnd="46dp"
+            android:layout_marginTop="16dp"
+            tools:listitem="@layout/item_spinner"
+            android:background="@drawable/rounded_shape"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSortBy"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

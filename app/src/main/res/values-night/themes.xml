@@ -1,22 +1,35 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <style name="Theme.ScrollerSplash" parent="Theme.SplashScreen.IconBackground">
+        <item name="windowSplashScreenBackground">@color/dark_blue</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/Theme.CountriesScroller</item>
+    </style>
+
     <style name="Theme.CountriesScroller" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
+        <item name="colorPrimary">@color/dark_blue</item>
+        <item name="colorPrimaryVariant">@color/dark_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/peach_color</item>
+        <item name="colorSecondaryVariant">@color/peach_color</item>
+        <item name="colorOnSecondary">@color/white</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="fontFamily">@font/mark_pro</item>
+        <item name="android:editTextColor">?attr/colorOnPrimary</item>
+        <item name="colorAccent">?attr/colorOnPrimary</item>
     </style>
 
     <style name="roundedImageViewRounded">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
+    <style name="PrettyButton" parent="@style/Widget.MaterialComponents.Button">
+        <item name="backgroundTint">?colorSecondary</item>
+        <item name="android:textColor">?colorOnSecondary</item>
+        <item name="android:textSize">18sp</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
 
 </resources>

@@ -2,10 +2,12 @@ package com.panasetskaia.countriesscroller.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import com.panasetskaia.countriesscroller.R
 import com.panasetskaia.countriesscroller.application.CountriesScrollerApp
 import com.panasetskaia.countriesscroller.di.viewmodel.ViewModelFactory
+import com.panasetskaia.countriesscroller.presentation.all_countries_screen.AllCountriesViewModel
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         component.inject(this)
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         setContentView(R.layout.activity_main)
         viewModel
     }

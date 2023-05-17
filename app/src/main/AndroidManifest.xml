@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:name=".application.CountriesScrollerApp"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/Theme.CountriesScroller"
+        android:theme="@style/Theme.ScrollerSplash"
         tools:targetApi="31">
         <activity
             android:name=".presentation.MainActivity"
