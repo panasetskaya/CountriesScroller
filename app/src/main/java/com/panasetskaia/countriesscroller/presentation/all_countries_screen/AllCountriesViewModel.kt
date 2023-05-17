@@ -14,6 +14,10 @@ class AllCountriesViewModel @Inject constructor(
     private val loadAllCountriesUseCase: LoadAllCountriesUseCase
 ) : BaseViewModel() {
 
+    private val initialValue: NetworkResult<List<Country>> = NetworkResult.loading()
+
+    private val _innerCashCountries = MutableStateFlow(initialValue)
+
     private val _filterOptions = MutableStateFlow(FilteringOptions())
     val filterOptions: StateFlow<FilteringOptions> = _filterOptions
 
@@ -25,14 +29,14 @@ class AllCountriesViewModel @Inject constructor(
     val countriesList: SharedFlow<NetworkResult<List<Country>>> = _countriesList
 
     init {
-        _countriesList.tryEmit(NetworkResult.loading())
+        _countriesList.tryEmit(initialValue)
         reloadCountries()
     }
 
     fun reloadCountries() {
         viewModelScope.launch {
-            val countries = loadAllCountriesUseCase()
-            _countriesList.tryEmit(countries)
+            _innerCashCountries.value = loadAllCountriesUseCase()
+            _countriesList.tryEmit(_innerCashCountries.value)
         }
     }
 
@@ -45,8 +49,10 @@ class AllCountriesViewModel @Inject constructor(
     }
 
     fun cancelFiltering() {
-        _countriesList.tryEmit(NetworkResult.loading())
-        reloadCountries()
-        _filterOptions.value = FilteringOptions()
+        viewModelScope.launch {
+            _filterOptions.value = FilteringOptions()
+            _countriesList.tryEmit(_innerCashCountries.value)
+        }
+
     }
 }
