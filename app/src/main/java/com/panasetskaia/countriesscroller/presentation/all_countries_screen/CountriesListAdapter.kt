@@ -53,7 +53,7 @@ class CountriesListAdapter :
                 }
             }
             SORT_BY_POPULATION -> {
-                result = result.sortedBy {
+                result = result.sortedByDescending {
                     it.population
                 }
             }

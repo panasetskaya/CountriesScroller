@@ -119,6 +119,7 @@ class AllCountriesFragment :
         binding.topAppBarMain.inflateMenu(R.menu.filter_menu)
         searchView = binding.topAppBarMain.menu.findItem(R.id.toolbar_search).actionView as SearchView
         searchView.maxWidth = Integer.MAX_VALUE
+
         binding.topAppBarMain.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.toolbar_menu_filter -> {
