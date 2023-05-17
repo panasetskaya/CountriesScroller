@@ -1,4 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.ScrollerSplash" parent="Theme.SplashScreen.IconBackground">
+        <item name="windowSplashScreenBackground">@color/peach_color</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/Theme.CountriesScroller</item>
+    </style>
+
     <style name="Theme.CountriesScroller" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/peach_color</item>
         <item name="colorPrimaryVariant">@color/peach_color</item>

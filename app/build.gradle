@@ -70,10 +70,11 @@ dependencies {
     implementation 'com.google.dagger:dagger:2.42'
     kapt 'com.google.dagger:dagger-compiler:2.42'
 
-    //retrofit
+    //network
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-//    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-//    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0'
+    implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0"
+    implementation "com.squareup.okhttp3:okhttp:4.7.2"
 
     //room
     def room_version = "2.5.1"
@@ -93,15 +94,7 @@ dependencies {
     //swipe refresh
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
-//    //moshi
-//    def moshiVersion = '1.13.0'
-//    implementation "com.squareup.moshi:moshi:$moshiVersion"
-//    implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
-//    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
-//    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
-
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0'
-    implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0"
-    implementation "com.squareup.okhttp3:okhttp:4.7.2"
+    //splash
+    implementation "androidx.core:core-splashscreen:1.0.1"
 
 }
