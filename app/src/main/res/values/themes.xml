@@ -16,7 +16,7 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="fontFamily">@font/mark_pro</item>
         <item name="android:editTextColor">?attr/colorOnPrimary</item>
-        <item name="colorAccent">?attr/colorOnPrimary</item>
+
     </style>
 
     <style name="roundedImageViewRounded">
@@ -41,6 +41,7 @@
         <item name="android:popupBackground">@drawable/rounded_shape</item>
         <item name="android:textAlignment">textStart</item>
     </style>
+
 
 
 

@@ -3,6 +3,7 @@ package com.panasetskaia.countriesscroller.presentation.details_screen
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -10,6 +11,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.panasetskaia.countriesscroller.R
 import com.panasetskaia.countriesscroller.databinding.FragmentDetailsBinding
+import com.panasetskaia.countriesscroller.di.viewmodel.ViewModelFactory
 import com.panasetskaia.countriesscroller.domain.Country
 import com.panasetskaia.countriesscroller.presentation.base.BaseFragment
 import com.panasetskaia.countriesscroller.utils.getAppComponent
@@ -21,8 +23,9 @@ class DetailsFragment :
     BaseFragment<FragmentDetailsBinding, DetailsViewModel>(FragmentDetailsBinding::inflate) {
 
     @Inject
-    override lateinit var viewModel: DetailsViewModel
+    lateinit var viewModelFactory: ViewModelFactory
 
+    override val viewModel by viewModels<DetailsViewModel> { viewModelFactory }
     private val navArgs by navArgs<DetailsFragmentArgs>()
 
     override fun onAttach(context: Context) {
@@ -41,7 +44,7 @@ class DetailsFragment :
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.country.collectLatest {
-                        setupBindingContent(it)
+                        setupViewsContent(it)
                     }
                 }
             }
@@ -55,7 +58,7 @@ class DetailsFragment :
         }
     }
 
-    private fun setupBindingContent(country: Country) {
+    private fun setupViewsContent(country: Country) {
         binding.topAppBarDetail.title = country.commonName
         val languages = country.languages
         if (languages.isNotEmpty() && viewModel.detailsAreNotNull(country)) {
@@ -83,7 +86,4 @@ class DetailsFragment :
                 .into(binding.imageViewBigFlag)
         }
     }
-
-
-
 }

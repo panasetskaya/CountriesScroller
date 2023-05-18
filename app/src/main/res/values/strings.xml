@@ -14,6 +14,7 @@
         <item>Name</item>
         <item>Population</item>
     </string-array>
+    <string name="default_category">All</string>
     <string name="filter_title">Filter title</string>
     <string name="unfilter_title">Filter off</string>
     <string name="default_spinner_item">All</string>

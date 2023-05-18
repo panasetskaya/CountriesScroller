@@ -2,12 +2,11 @@ package com.panasetskaia.countriesscroller.presentation.all_countries_screen
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -16,10 +15,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.panasetskaia.countriesscroller.R
 import com.panasetskaia.countriesscroller.databinding.BottomSheetBinding
 import com.panasetskaia.countriesscroller.databinding.FragmentAllCountriesBinding
+import com.panasetskaia.countriesscroller.di.viewmodel.ViewModelFactory
 import com.panasetskaia.countriesscroller.domain.Country
 import com.panasetskaia.countriesscroller.domain.Status
 import com.panasetskaia.countriesscroller.presentation.base.BaseFragment
-import com.panasetskaia.countriesscroller.utils.Constants
 import com.panasetskaia.countriesscroller.utils.getAppComponent
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -29,10 +28,14 @@ class AllCountriesFragment :
     BaseFragment<FragmentAllCountriesBinding, AllCountriesViewModel>(FragmentAllCountriesBinding::inflate) {
 
     @Inject
-    override lateinit var viewModel: AllCountriesViewModel
+    lateinit var viewModelFactory: ViewModelFactory
+
+    override val viewModel by viewModels<AllCountriesViewModel> { viewModelFactory }
     private lateinit var searchView: SearchView
     private lateinit var bottomSheetDialog: BottomSheetDialog
     private lateinit var listAdapter: CountriesListAdapter
+    private lateinit var spinnerSubregionsAdapter: ArrayAdapter<CharSequence?>
+    private lateinit var spinnerSortByAdapter: ArrayAdapter<CharSequence?>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -42,7 +45,7 @@ class AllCountriesFragment :
     override fun onReady(savedInstanceState: Bundle?) {
         setupSwipeRefresh()
         bottomSheetDialog = BottomSheetDialog(requireContext())
-        setAdapter()
+        setAdapters()
         setMenuProvider()
         collectFlow()
     }
@@ -50,18 +53,48 @@ class AllCountriesFragment :
     private fun setupSwipeRefresh() {
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.reloadCountries()
-            Log.d(Constants.LOG_TAG, "swipeRefresh.setOnRefreshListener")
         }
     }
 
-    private fun setAdapter() {
+    private fun setAdapters() {
         listAdapter = CountriesListAdapter()
-        listAdapter.stateRestorationPolicy =
-            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        binding.rViewCountries.adapter = listAdapter
-        listAdapter.onItemClickedListener = {
-            viewModel.goToCountryDetailsFragment(it)
+        with(listAdapter) {
+            stateRestorationPolicy =
+                RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            binding.rViewCountries.adapter = this
+            onItemClickedListener = {
+                viewModel.goToCountryDetailsFragment(it)
+            }
         }
+        setSortByAdapter()
+        setNewListForSubregionsSpinner(
+            resources.getStringArray(R.array.subregions_array).toList()
+        )
+    }
+
+    private fun setSortByAdapter() {
+        spinnerSortByAdapter = ArrayAdapter.createFromResource(
+            this.requireContext(),
+            R.array.sort_options_array,
+            R.layout.item_spinner
+        ).also {
+            it.setDropDownViewResource(R.layout.item_spinner_dropdown)
+        }
+    }
+
+    private fun setNewListForSubregionsSpinner(
+        list: List<String?>
+    ) {
+        val listToSubmit = list.filterNotNull()
+        spinnerSubregionsAdapter = ArrayAdapter(
+            requireContext(),
+            R.layout.item_spinner,
+            listToSubmit
+        )
+        spinnerSubregionsAdapter.also {
+            it.setDropDownViewResource(R.layout.item_spinner_dropdown)
+        }
+
     }
 
     private fun collectFlow() {
@@ -71,25 +104,24 @@ class AllCountriesFragment :
                     viewModel.countriesList.collectLatest { result ->
                         when (result.status) {
                             Status.ERROR -> {
-                                binding.swipeRefresh.isRefreshing = false
-                                binding.progressBar.visibility = View.GONE
+                                hideProgressBar()
                                 Toast.makeText(
                                     requireContext(),
                                     result.msg,
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                if (result.data != null) {
-                                    listAdapter.submitList(result.data)
+                                result.data?.let {
+                                    listAdapter.submitList(it)
                                 }
+
                             }
                             Status.LOADING -> {
-                                binding.swipeRefresh.isRefreshing = false
-                                binding.progressBar.visibility = View.VISIBLE
+                                showProgressBar()
                             }
                             Status.SUCCESS -> {
-                                binding.swipeRefresh.isRefreshing = false
-                                binding.progressBar.visibility = View.GONE
+                                hideProgressBar()
                                 listAdapter.submitList(result.data)
+                                setSubregions(result.data)
                                 setupSearch(result.data)
                             }
                         }
@@ -98,15 +130,9 @@ class AllCountriesFragment :
                 launch {
                     viewModel.filterOptions.collectLatest { filteringOptions ->
                         if (filteringOptions.subRegion != null) {
-                            binding.topAppBarMain.menu.findItem(R.id.toolbar_menu_filter).isVisible =
-                                false
-                            binding.topAppBarMain.menu.findItem(R.id.toolbar_menu_filter_off).isVisible =
-                                true
+                            showFilterOffIcon()
                         } else {
-                            binding.topAppBarMain.menu.findItem(R.id.toolbar_menu_filter).isVisible =
-                                true
-                            binding.topAppBarMain.menu.findItem(R.id.toolbar_menu_filter_off).isVisible =
-                                false
+                            showFilterIcon()
                         }
                         listAdapter.applyFilters(filteringOptions)
                     }
@@ -115,11 +141,47 @@ class AllCountriesFragment :
         }
     }
 
+    private fun setSubregions(data: List<Country>?) {
+        val subregions: MutableList<String?> = mutableListOf(getString(R.string.default_category))
+        val dataSubregions = data?.map {
+            it.subregion
+        }
+        dataSubregions?.let {
+            subregions.addAll(it.toSet())
+            setNewListForSubregionsSpinner(subregions.toList())
+        }
+
+    }
+
+    private fun showProgressBar() {
+        binding.swipeRefresh.isRefreshing = false
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        binding.swipeRefresh.isRefreshing = false
+        binding.progressBar.visibility = View.GONE
+    }
+
+    private fun showFilterIcon() {
+        binding.topAppBarMain.menu.findItem(R.id.toolbar_menu_filter).isVisible =
+            true
+        binding.topAppBarMain.menu.findItem(R.id.toolbar_menu_filter_off).isVisible =
+            false
+    }
+
+    private fun showFilterOffIcon() {
+        binding.topAppBarMain.menu.findItem(R.id.toolbar_menu_filter).isVisible =
+            false
+        binding.topAppBarMain.menu.findItem(R.id.toolbar_menu_filter_off).isVisible =
+            true
+    }
+
     private fun setMenuProvider() {
         binding.topAppBarMain.inflateMenu(R.menu.filter_menu)
-        searchView = binding.topAppBarMain.menu.findItem(R.id.toolbar_search).actionView as SearchView
+        searchView =
+            binding.topAppBarMain.menu.findItem(R.id.toolbar_search).actionView as SearchView
         searchView.maxWidth = Integer.MAX_VALUE
-
         binding.topAppBarMain.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.toolbar_menu_filter -> {
@@ -139,32 +201,23 @@ class AllCountriesFragment :
 
     private fun showBottomSheetDialog() {
         val bottomSheetBinding = BottomSheetBinding.inflate(layoutInflater)
-        bottomSheetDialog.setContentView(bottomSheetBinding.root)
-        setSpinner(bottomSheetBinding.spinnerSubregions, R.array.subregions_array)
-        setSpinner(bottomSheetBinding.spinnerSorting, R.array.sort_options_array)
-        bottomSheetBinding.applyFiltersButton.setOnClickListener {
-            val selectedSubregion =
-                if (bottomSheetBinding.spinnerSubregions.selectedItemPosition == 0) {
-                    null
-                } else {
-                    bottomSheetBinding.spinnerSubregions.selectedItem as String?
-                }
-            val selectedSorting = bottomSheetBinding.spinnerSorting.selectedItemPosition
-            viewModel.changeFiltering(selectedSubregion, selectedSorting)
-            bottomSheetDialog.dismiss()
+        with(bottomSheetBinding) {
+            bottomSheetDialog.setContentView(root)
+            spinnerSubregions.adapter = spinnerSubregionsAdapter
+            spinnerSorting.adapter = spinnerSortByAdapter
+            applyFiltersButton.setOnClickListener {
+                val selectedSubregion =
+                    if (spinnerSubregions.selectedItemPosition == 0) {
+                        null
+                    } else {
+                        spinnerSubregions.selectedItem as String?
+                    }
+                val selectedSorting = spinnerSorting.selectedItemPosition
+                viewModel.changeFiltering(selectedSubregion, selectedSorting)
+                bottomSheetDialog.dismiss()
+            }
         }
         bottomSheetDialog.show()
-    }
-
-    private fun setSpinner(spinner: Spinner, array: Int) {
-        ArrayAdapter.createFromResource(
-            this.requireContext(),
-            array,
-            R.layout.item_spinner
-        ).also { adapter ->
-            adapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
-            spinner.adapter = adapter
-        }
     }
 
     private fun setupSearch(list: List<Country>?) {
@@ -174,18 +227,20 @@ class AllCountriesFragment :
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                filterByQuery(newText,list)
+                filterByQuery(newText, list)
                 return false
             }
         })
     }
 
-    private fun filterByQuery(query: String?, list: List<Country>?
+    private fun filterByQuery(
+        query: String?, list: List<Country>?
     ) {
         query?.let {
             val thereIs = list?.any { country ->
-                country.commonName.lowercase().contains(query.lowercase()) }
-            if (thereIs==true) {
+                country.commonName.lowercase().contains(query.lowercase())
+            }
+            if (thereIs == true) {
                 listAdapter.filterByQuery(it, list)
             } else {
                 Toast.makeText(requireContext(), getString(R.string.not_found), Toast.LENGTH_SHORT)

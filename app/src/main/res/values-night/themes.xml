@@ -16,7 +16,12 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="fontFamily">@font/mark_pro</item>
         <item name="android:editTextColor">?attr/colorOnPrimary</item>
-        <item name="colorAccent">?attr/colorOnPrimary</item>
+
+    </style>
+
+    <style name="roundedCornersImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">32dp</item>
     </style>
 
     <style name="roundedImageViewRounded">
@@ -29,6 +34,12 @@
         <item name="android:textColor">?colorOnSecondary</item>
         <item name="android:textSize">18sp</item>
         <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="SpinnerTheme" parent="Widget.AppCompat.Spinner.Underlined">
+        <item name="android:background">@drawable/rounded_shape</item>
+        <item name="android:popupBackground">@drawable/rounded_shape</item>
+        <item name="android:textAlignment">textStart</item>
     </style>
 
 
