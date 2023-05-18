@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="Theme.ScrollerSplash" parent="Theme.SplashScreen.IconBackground">
         <item name="windowSplashScreenBackground">@color/dark_blue</item>
@@ -16,7 +16,6 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="fontFamily">@font/mark_pro</item>
         <item name="android:editTextColor">?attr/colorOnPrimary</item>
-
     </style>
 
     <style name="roundedCornersImageView">
@@ -24,7 +23,7 @@
         <item name="cornerSize">32dp</item>
     </style>
 
-    <style name="roundedImageViewRounded">
+    <style name="RoundImageView">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>

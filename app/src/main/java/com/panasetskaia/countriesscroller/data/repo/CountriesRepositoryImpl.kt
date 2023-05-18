@@ -1,6 +1,8 @@
 package com.panasetskaia.countriesscroller.data.repo
 
+import android.app.Application
 import android.util.Log
+import com.panasetskaia.countriesscroller.R
 import com.panasetskaia.countriesscroller.data.local.CountryDao
 import com.panasetskaia.countriesscroller.data.mapper.CountryMapper
 import com.panasetskaia.countriesscroller.data.network.ApiService
@@ -14,7 +16,8 @@ import javax.inject.Inject
 class CountriesRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     private val mapper: CountryMapper,
-    private val dao: CountryDao
+    private val dao: CountryDao,
+    private val application: Application
 ) : CountriesRepository {
 
     override suspend fun loadAllCountries(): NetworkResult<List<Country>> {
@@ -24,7 +27,7 @@ class CountriesRepositoryImpl @Inject constructor(
                 val countryDBModel = mapper.mapDtoToDBModel(countryDto)
                 countryDBModel?.let {
                     dao.insertCountry(it)
-                } ?: Log.d(LOG_TAG, "Null common name for dto: $countryDto")
+                } ?: Log.e(LOG_TAG, "Null common name for dto: $countryDto")
             }
             val countriesFromDb = dao.getCountries().map {
                 mapper.mapDBModelToDomainEntity(it)
@@ -39,9 +42,9 @@ class CountriesRepositoryImpl @Inject constructor(
                 }
             } else null
             val msg = if (e is UnknownHostException) {
-                "You are offline"
+                application.applicationContext.getString(R.string.offline_error)
             } else {
-                "Network error"
+                application.applicationContext.getString(R.string.network_error)
             }
             NetworkResult.error(result, msg)
         }

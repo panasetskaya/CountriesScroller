@@ -12,13 +12,10 @@ import javax.inject.Inject
 
 class CountryMapper @Inject constructor() {
 
-    /**
-     * Returns a CountryDBModel object if the dtoModel's commonName is not null otherwise returns null
-     */
     fun mapDtoToDBModel(dtoModel: CountryDto): CountryDBModel? {
         val languages = parseLanguages(dtoModel)
         val nameContainer = dtoModel.name
-        if (nameContainer==null) return null else {
+        if (nameContainer == null) return null else {
             val commonName = nameContainer.commonName ?: return null
             val officialName = dtoModel.name.officialName
             val capital = dtoModel.capital?.get(0)
@@ -55,9 +52,11 @@ class CountryMapper @Inject constructor() {
             try {
                 val language = Json.encodeToString(languagesJsonObj[key]).trim('"')
                 result.add(language)
-                Log.e(Constants.LOG_TAG,"language: $language")
-            } catch (e:Exception) {
-                Log.e(Constants.LOG_TAG,"Error occurred when parsing languagesJsonObject: ${e.message}")
+            } catch (e: Exception) {
+                Log.e(
+                    Constants.LOG_TAG,
+                    "Error occurred when parsing languagesJsonObject: ${e.message}"
+                )
             }
         }
         return result

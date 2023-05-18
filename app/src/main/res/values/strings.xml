@@ -28,4 +28,8 @@
     <string name="country_info">%1s is in %2s.\n\nThere are %3d thousand people living there, they speak %4s.\n\n%5s\'s capital is %6s.</string>
     <string name="not_found">Not found</string>
     <string name="search">Search</string>
+
+    //error msg
+    <string name="offline_error">You are offline</string>
+    <string name="network_error">Network error</string>
 </resources>
