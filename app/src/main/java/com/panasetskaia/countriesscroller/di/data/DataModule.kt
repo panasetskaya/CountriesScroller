@@ -33,5 +33,4 @@ interface DataModule {
             return CountryDatabase.getInstance(application).countryDao()
         }
     }
-
 }

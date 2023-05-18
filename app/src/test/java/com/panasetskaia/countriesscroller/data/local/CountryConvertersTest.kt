@@ -6,18 +6,20 @@ import org.junit.Test
 
 class CountryConvertersTest {
 
-    private lateinit var converter: CountryConverters
+    private lateinit var SUT: CountryConverters
 
     @Before
     fun setUp() {
-        converter = CountryConverters()
+        SUT = CountryConverters()
     }
 
     @Test
-    fun doubleConvertingInitialValue_returnsInitialValue() {
+    fun doubleConverting_returnsInitialValue() {
         val initialList = listOf("Spanish", "Danish")
-        val convertedToString = converter.listToString(initialList)
-        val convertedBackToList = converter.stringToList(convertedToString)
+
+        val convertedToString = SUT.listToString(initialList)
+        val convertedBackToList = SUT.stringToList(convertedToString)
+
         assertThat(convertedBackToList).isEqualTo(initialList)
     }
 }
