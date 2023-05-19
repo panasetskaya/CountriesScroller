@@ -29,7 +29,7 @@ class AllCountriesViewModelTest {
     fun when_ResponseIsError_Expect_EmitsErrorWithList() {
         repo.shouldReturnError = true
         runTest {
-            val result = SUT.countriesList.first()
+            val result = withTimeout(500) {SUT.countriesList.first()}
             assertThat(result.status).isEqualTo(Status.ERROR)
             assertThat(result.data).isNotNull()
         }
@@ -40,7 +40,7 @@ class AllCountriesViewModelTest {
     fun when_ResponseIsSuccess_Expect_EmitsSuccess() {
         repo.shouldReturnError = false
         runTest {
-            val result = SUT.countriesList.first()
+            val result = withTimeout(500) {SUT.countriesList.first()}
             assertThat(result.status).isEqualTo(Status.SUCCESS)
         }
     }
@@ -51,7 +51,7 @@ class AllCountriesViewModelTest {
         runTest {
             val initialOptions = SUT.filterOptions.first()
             SUT.changeFiltering("asia", 1)
-            val result = SUT.filterOptions.first()
+            val result = withTimeout(1000) {SUT.filterOptions.first()}
             assertThat(result).isNotEqualTo(initialOptions)
         }
     }
