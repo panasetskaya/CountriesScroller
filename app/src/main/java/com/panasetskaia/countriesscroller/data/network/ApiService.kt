@@ -6,7 +6,7 @@ import java.net.UnknownHostException
 
 interface ApiService {
 
-    @Throws(UnknownHostException::class)
+    @Throws(Exception::class)
     @GET("all")
     suspend fun getAllCountries(
     ): ArrayList<CountryDto>

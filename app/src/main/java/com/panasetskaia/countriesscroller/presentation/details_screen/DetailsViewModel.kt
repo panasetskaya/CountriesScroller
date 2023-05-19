@@ -31,9 +31,9 @@ class DetailsViewModel @Inject constructor(
     }
 
     fun detailsAreNotNull(country: Country): Boolean {
-        return country.subregion != null &&
+        return country.subregion != null && country.subregion != "" &&
                 country.population != null &&
-                country.capital != null
+                country.capital != null && country.capital != ""
     }
 
     fun convertToThousands(population: Int): Int {

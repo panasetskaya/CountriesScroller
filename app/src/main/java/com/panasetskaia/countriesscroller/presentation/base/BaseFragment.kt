@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import com.panasetskaia.countriesscroller.R
 import com.panasetskaia.countriesscroller.presentation.navigation.NavigationCommand
 import com.panasetskaia.countriesscroller.utils.Constants
 import kotlinx.coroutines.flow.collectLatest
@@ -27,7 +28,7 @@ abstract class BaseFragment<mbinding : ViewBinding, mviewModel : BaseViewModel>(
 
     private var _binding: mbinding? = null
     val binding: mbinding
-        get() = _binding ?: throw RuntimeException("FragmentBinding is null")
+        get() = _binding ?: throw RuntimeException(getString(R.string.binding_null))
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

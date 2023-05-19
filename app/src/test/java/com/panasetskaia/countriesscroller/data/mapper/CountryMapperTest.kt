@@ -18,7 +18,7 @@ class CountryMapperTest {
     }
 
     @Test
-    fun commonNameIsNull_returnsNull() {
+    fun `when commonName is null expect null`() {
         val dtoModel = CountryDto(
             NamesContainerDto(null, "official"),
             "subregion",
@@ -34,7 +34,7 @@ class CountryMapperTest {
     }
 
     @Test
-    fun commonNameIsNotNull_returnsCountryDBModel() {
+    fun `when commonName is not null expect CountryDBModel`() {
         val dtoModel = CountryDto(
             NamesContainerDto("common", "official"),
             "subregion",
@@ -60,7 +60,7 @@ class CountryMapperTest {
     }
 
     @Test
-    fun languagesJsonObjectIsNull_returnsEmptyListAsLanguages() {
+    fun `when languages is null expect empty list`() {
         val dtoModel = CountryDto(
             NamesContainerDto("common", "official"),
             "subregion",

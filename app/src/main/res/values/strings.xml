@@ -30,4 +30,5 @@
     //error msg
     <string name="offline_error">You are offline</string>
     <string name="network_error">Network error</string>
+    <string name="binding_null">FragmentBinding is null</string>
 </resources>

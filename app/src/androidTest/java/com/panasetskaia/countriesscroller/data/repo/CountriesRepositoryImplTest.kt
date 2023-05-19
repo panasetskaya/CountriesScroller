@@ -10,6 +10,7 @@ import com.panasetskaia.countriesscroller.data.network.ApiService
 import com.panasetskaia.countriesscroller.domain.Status
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.json.JSONException
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -53,14 +54,28 @@ class CountriesRepositoryImplTest {
     @Test
     fun getsUnknownHostException_returnsOfflineMessage() {
         runTest {
-
             whenever(apiService.getAllCountries()).thenThrow(UnknownHostException())
             whenever (dao.getCountries()).thenReturn(listOf() )
             val context = ApplicationProvider.getApplicationContext<Context>()
 
             val result = SUT.loadAllCountries()
-
+            assertThat(result.status).isEqualTo(Status.ERROR)
             assertThat(result.msg).isEqualTo(context.getString(R.string.offline_error))
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun getsAnotherException_returnsNetworkErrorMessage() {
+        runTest {
+            whenever(apiService.getAllCountries()).thenThrow(JSONException(""))
+            whenever (dao.getCountries()).thenReturn(listOf() )
+            val context = ApplicationProvider.getApplicationContext<Context>()
+
+            val result = SUT.loadAllCountries()
+
+            assertThat(result.status).isEqualTo(Status.ERROR)
+            assertThat(result.msg).isEqualTo(context.getString(R.string.network_error))
         }
     }
 }
