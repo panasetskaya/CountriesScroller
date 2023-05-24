@@ -1,6 +1,7 @@
 package com.panasetskaia.countriesscroller.data.repo
 
 import com.google.common.truth.Truth.assertThat
+import com.panasetskaia.countriesscroller.data.local.CountryDBModel
 import com.panasetskaia.countriesscroller.data.local.CountryDao
 import com.panasetskaia.countriesscroller.data.mapper.CountryMapper
 import com.panasetskaia.countriesscroller.data.network.ApiService
@@ -46,6 +47,23 @@ class CountriesRepositoryImplTest {
             val result = SUT.loadAllCountries()
 
             assertThat(result.status).isEqualTo(Status.SUCCESS)
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun getsGoodResponse_returnsThroughDatabase() {
+        runTest{
+            whenever(apiService.getAllCountries()).thenReturn(arrayListOf())
+            whenever(dao.getCountries()).thenReturn(listOf(CountryDBModel(
+                "name", null, null, listOf("lang"),null,null,null)))
+
+            val result = SUT.loadAllCountries()
+
+            assertThat(result.data).isNotNull()
+            result.data?.let {
+                assertThat(it[0].commonName).isEqualTo("name")
+            }
         }
     }
 
