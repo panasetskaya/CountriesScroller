@@ -1,8 +1,6 @@
 package com.panasetskaia.countriesscroller.data.repo
 
-import android.app.Application
 import android.util.Log
-import com.panasetskaia.countriesscroller.R
 import com.panasetskaia.countriesscroller.data.local.CountryDao
 import com.panasetskaia.countriesscroller.data.mapper.CountryMapper
 import com.panasetskaia.countriesscroller.data.network.ApiService
@@ -17,7 +15,7 @@ class CountriesRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     private val mapper: CountryMapper,
     private val dao: CountryDao,
-    private val application: Application
+    private val countriesResourceManager: CountriesResourceManager
 ) : CountriesRepository {
 
     override suspend fun loadAllCountries(): NetworkResult<List<Country>> {
@@ -42,9 +40,9 @@ class CountriesRepositoryImpl @Inject constructor(
                 }
             } else null
             val msg = if (e is UnknownHostException) {
-                application.applicationContext.getString(R.string.offline_error)
+                countriesResourceManager.returnOfflineErrorString()
             } else {
-                application.applicationContext.getString(R.string.network_error)
+                countriesResourceManager.returnNetworkErrorString()
             }
             NetworkResult.error(result, msg)
         }

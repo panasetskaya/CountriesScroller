@@ -1,9 +1,6 @@
 package com.panasetskaia.countriesscroller.data.repo
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
-import com.panasetskaia.countriesscroller.R
 import com.panasetskaia.countriesscroller.data.local.CountryDao
 import com.panasetskaia.countriesscroller.data.mapper.CountryMapper
 import com.panasetskaia.countriesscroller.data.network.ApiService
@@ -23,17 +20,19 @@ class CountriesRepositoryImplTest {
     private lateinit var apiService: ApiService
     private lateinit var mapper: CountryMapper
     private lateinit var dao: CountryDao
+    private lateinit var resourceManager: CountriesResourceManager
 
     @Before
     fun setUp() {
         mapper = CountryMapper()
+        resourceManager = mock(CountriesResourceManager::class.java)
         apiService = mock(ApiService::class.java)
         dao = mock(CountryDao::class.java)
         SUT = CountriesRepositoryImpl(
             apiService,
             mapper,
             dao,
-            ApplicationProvider.getApplicationContext()
+            resourceManager
         )
     }
 
@@ -42,7 +41,7 @@ class CountriesRepositoryImplTest {
     fun getGoodResponse_returnsNetworkResultSuccess() {
         runTest {
             whenever(apiService.getAllCountries()).thenReturn(arrayListOf())
-            whenever (dao.getCountries()).thenReturn(listOf() )
+            whenever(dao.getCountries()).thenReturn(listOf())
 
             val result = SUT.loadAllCountries()
 
@@ -54,13 +53,16 @@ class CountriesRepositoryImplTest {
     @Test
     fun getsUnknownHostException_returnsOfflineMessage() {
         runTest {
+            val offlineString = "offline"
             whenever(apiService.getAllCountries()).thenThrow(UnknownHostException())
-            whenever (dao.getCountries()).thenReturn(listOf() )
-            val context = ApplicationProvider.getApplicationContext<Context>()
+            whenever(dao.getCountries()).thenReturn(listOf())
+            whenever(resourceManager.returnOfflineErrorString()).thenReturn(offlineString)
+
 
             val result = SUT.loadAllCountries()
+
             assertThat(result.status).isEqualTo(Status.ERROR)
-            assertThat(result.msg).isEqualTo(context.getString(R.string.offline_error))
+            assertThat(result.msg).isEqualTo(offlineString)
         }
     }
 
@@ -68,14 +70,15 @@ class CountriesRepositoryImplTest {
     @Test
     fun getsAnotherException_returnsNetworkErrorMessage() {
         runTest {
+            val network = "network"
             whenever(apiService.getAllCountries()).thenThrow(JSONException(""))
-            whenever (dao.getCountries()).thenReturn(listOf() )
-            val context = ApplicationProvider.getApplicationContext<Context>()
+            whenever(dao.getCountries()).thenReturn(listOf())
+            whenever(resourceManager.returnNetworkErrorString()).thenReturn(network)
 
             val result = SUT.loadAllCountries()
 
             assertThat(result.status).isEqualTo(Status.ERROR)
-            assertThat(result.msg).isEqualTo(context.getString(R.string.network_error))
+            assertThat(result.msg).isEqualTo(network)
         }
     }
 }
