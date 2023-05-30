@@ -25,21 +25,6 @@ class AllCountriesViewModel @Inject constructor(
         )
     val screenState: SharedFlow<ScreenState<List<Country>>> = _screenState
 
-
-//    private val initialValue: NetworkResult<List<Country>> = NetworkResult.loading()
-//
-//    private val _innerCashCountries = MutableStateFlow(initialValue)
-//
-//    private val _filterOptions = MutableStateFlow(FilteringOptions())
-//    val filterOptions: StateFlow<FilteringOptions> = _filterOptions
-//
-//    private val _countriesList =
-//        MutableSharedFlow<NetworkResult<List<Country>>>(
-//            replay = 1,
-//            onBufferOverflow = BufferOverflow.DROP_OLDEST
-//        )
-//    val countriesList: SharedFlow<NetworkResult<List<Country>>> = _countriesList
-
     init {
         _screenState.tryEmit(screenStateInitial)
         reloadCountries()
@@ -63,8 +48,7 @@ class AllCountriesViewModel @Inject constructor(
         val errorState = if (withError) {
             ErrorState.error(networkResult.msg)
         } else ErrorState.perfect()
-        val newScreenState = ScreenState(
-            ScreenStatus.FINISHED,
+        val newScreenState = ScreenState.finished(
             errorState,
             networkResult.data,
             false
@@ -81,8 +65,7 @@ class AllCountriesViewModel @Inject constructor(
 
     fun changeFiltering(subregion: String?, position: Int = 0) {
         val data = applyFilters(FilteringOptions(subregion, position))
-        val newScreenState = ScreenState(
-            ScreenStatus.FINISHED,
+        val newScreenState = ScreenState.finished(
             ErrorState.perfect(),
             data,
             true
@@ -91,8 +74,7 @@ class AllCountriesViewModel @Inject constructor(
     }
 
     fun cancelFiltering() {
-        val newScreenState = ScreenState(
-            ScreenStatus.FINISHED,
+        val newScreenState = ScreenState.finished(
             ErrorState.perfect(),
             innerCashList.value,
             false
