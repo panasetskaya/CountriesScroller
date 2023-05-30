@@ -9,13 +9,9 @@ data class NetworkResult<out T>(val status: Status, val data: T?, val msg: Strin
         fun <T> error(data: T?, msg: String?): NetworkResult<T> {
             return NetworkResult(Status.ERROR, data, msg)
         }
-        fun <T> loading(): NetworkResult<T> {
-            return NetworkResult(Status.LOADING, null, null)
-        }
     }
 }
 enum class Status {
     SUCCESS,
-    ERROR,
-    LOADING
+    ERROR
 }

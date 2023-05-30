@@ -17,7 +17,6 @@ import com.panasetskaia.countriesscroller.databinding.BottomSheetBinding
 import com.panasetskaia.countriesscroller.databinding.FragmentAllCountriesBinding
 import com.panasetskaia.countriesscroller.di.viewmodel.ViewModelFactory
 import com.panasetskaia.countriesscroller.domain.Country
-import com.panasetskaia.countriesscroller.domain.Status
 import com.panasetskaia.countriesscroller.presentation.base.BaseFragment
 import com.panasetskaia.countriesscroller.utils.getAppComponent
 import kotlinx.coroutines.flow.collectLatest
@@ -101,45 +100,51 @@ class AllCountriesFragment :
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.countriesList.collectLatest { result ->
-                        when (result.status) {
-                            Status.ERROR -> {
-                                hideProgressBar()
-                                Toast.makeText(
-                                    requireContext(),
-                                    result.msg,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                result.data?.let {
-                                    listAdapter.submitList(it)
-                                }
-
-                            }
-                            Status.LOADING -> {
+                    viewModel.screenState.collectLatest { screenState ->
+                        when (screenState.status) {
+                            ScreenStatus.LOADING -> {
                                 showProgressBar()
                             }
-                            Status.SUCCESS -> {
+                            ScreenStatus.FINISHED -> {
                                 hideProgressBar()
-                                listAdapter.submitList(result.data)
-                                setSubregions(result.data)
-                                setupSearch(result.data)
+                                handleErrorState(screenState.errorState)
+                                handleData(screenState)
                             }
                         }
-                    }
-                }
-                launch {
-                    viewModel.filterOptions.collectLatest { filteringOptions ->
-                        if (filteringOptions.subRegion != null) {
-                            showFilterOffIcon()
-                        } else {
-                            showFilterIcon()
-                        }
-                        listAdapter.applyFilters(filteringOptions)
                     }
                 }
             }
         }
     }
+
+    private fun handleErrorState(errorState: ErrorState) {
+        val errorStatus =
+            errorState.status.getContentIfNotHandled()
+        errorStatus?.let {
+            if (it == ErrorStatus.ALL_BAD) {
+                Toast.makeText(
+                    requireContext(),
+                    errorState.msg,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun handleData(screenState: ScreenState<List<Country>>) {
+        val data = screenState.data
+        data?.let {
+            listAdapter.submitList(it)
+            if (screenState.filtersApplied)  {
+                    showFilterOffIcon()
+                } else {
+                    showFilterIcon()
+                }
+            setSubregions(it)
+            setupSearch(it)
+        }
+    }
+
 
     private fun setSubregions(data: List<Country>?) {
         val subregions: MutableList<String?> = mutableListOf(getString(R.string.default_category))
@@ -197,6 +202,7 @@ class AllCountriesFragment :
                 }
             }
         }
+        showFilterIcon()
     }
 
     private fun showBottomSheetDialog() {
