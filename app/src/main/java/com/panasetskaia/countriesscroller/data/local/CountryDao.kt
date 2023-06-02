@@ -11,7 +11,7 @@ interface CountryDao {
     @Query("SELECT * FROM countrydbmodel ORDER BY commonName ASC")
     suspend fun getCountries(): List<CountryDBModel>
 
-    @Query("SELECT * FROM countrydbmodel WHERE commonName == :commonName LIMIT 1")
+    @Query("SELECT * FROM countrydbmodel WHERE commonName == :commonName")
     suspend fun getCountryByName(commonName: String): CountryDBModel?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
