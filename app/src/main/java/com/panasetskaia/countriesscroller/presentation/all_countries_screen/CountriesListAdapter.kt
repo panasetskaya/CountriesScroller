@@ -40,10 +40,10 @@ class CountriesListAdapter :
         }
     }
 
-    fun filterByQuery(query: String, list: List<Country>) {
-        val result = list.filter { country ->
-            country.commonName.lowercase().contains(query.lowercase())
-        }
-        submitList(result)
-    }
+//    fun filterByQuery(query: String, list: List<Country>) {
+//        val result = list.filter { country ->
+//            country.commonName.lowercase().contains(query.lowercase())
+//        }
+//        submitList(result)
+//    }
 }

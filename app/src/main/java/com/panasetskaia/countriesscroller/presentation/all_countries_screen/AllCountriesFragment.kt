@@ -237,6 +237,10 @@ class AllCountriesFragment :
                 return false
             }
         })
+        searchView.setOnCloseListener {
+            viewModel.cancelFiltering()
+            false
+        }
     }
 
     private fun filterByQuery(
@@ -247,7 +251,8 @@ class AllCountriesFragment :
                 country.commonName.lowercase().contains(query.lowercase())
             }
             if (thereIs == true) {
-                listAdapter.filterByQuery(it, list)
+                viewModel.filterByQuery(it)
+//                listAdapter.filterByQuery(it, list)
             } else {
                 Toast.makeText(requireContext(), getString(R.string.not_found), Toast.LENGTH_SHORT)
                     .show()

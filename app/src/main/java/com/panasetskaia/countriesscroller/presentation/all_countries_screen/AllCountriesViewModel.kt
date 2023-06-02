@@ -103,6 +103,19 @@ class AllCountriesViewModel @Inject constructor(
         return result
     }
 
+    fun filterByQuery(query: String) {
+        val initialList = innerCashList.value
+        val result = initialList.filter { country ->
+            country.commonName.lowercase().contains(query.lowercase())
+        }
+        val newScreenState = ScreenState.finished(
+            ErrorState.perfect(),
+            result,
+            false
+        )
+        _screenState.tryEmit(newScreenState)
+    }
+
     companion object {
         private const val SORT_BY_NAME = 0
         private const val SORT_BY_POPULATION = 1
